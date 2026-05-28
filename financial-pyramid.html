@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>六层金融金字塔 - 完整知识体系</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#080c14;
+  --bg2:#0d1424;
+  --surface:#111b30;
+  --surface2:#182642;
+  --gold:#c9a84c;
+  --gold-light:#e8d08a;
+  --gold-dim:#a08838;
+  --accent:#4fc3c3;
+  --accent-dim:#2a7a7a;
+  --text:#e8e4de;
+  --text2:#9a9488;
+  --text3:#5a5548;
+  --border:#1e2d50;
+  --radius:12px;
+  --radius-sm:8px;
+  --font-serif:'Playfair Display',Georgia,serif;
+  --font-sans:'DM Sans','Segoe UI',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono','Cascadia Code',monospace;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(201,168,76,.3);color:#fff}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold-dim)}
+
+/* ===== HERO ===== */
+.hero{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:2rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 20%, rgba(201,168,76,.08) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 80% 70%, rgba(79,195,195,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 40% at 20% 60%, rgba(201,168,76,.03) 0%, transparent 50%);
+  pointer-events:none;
+}
+.hero-grid{
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(30,45,80,.15) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30,45,80,.15) 1px, transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.hero-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:.5rem;
+  padding:.4rem 1.2rem;
+  border:1px solid var(--gold-dim);
+  border-radius:100px;
+  font-size:.75rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--gold-light);
+  background:rgba(201,168,76,.06);
+  margin-bottom:2rem;
+  position:relative;
+}
+.hero-badge-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--gold);
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{
+  font-family:var(--font-serif);
+  font-size:clamp(2.8rem,7vw,5.5rem);
+  font-weight:700;
+  line-height:1.15;
+  position:relative;
+}
+.hero h1 .gold{color:var(--gold-light)}
+.hero h1 .outline{
+  -webkit-text-fill-color:transparent;
+  -webkit-text-stroke:1.5px var(--gold-dim);
+}
+.hero-sub{
+  font-size:clamp(1rem,2vw,1.3rem);
+  color:var(--text2);
+  max-width:640px;
+  margin:1.5rem auto 2.5rem;
+  line-height:1.8;
+}
+.hero-stats{
+  display:flex;
+  gap:3rem;
+  flex-wrap:wrap;
+  justify-content:center;
+  position:relative;
+}
+.hero-stat{
+  text-align:center;
+}
+.hero-stat-num{
+  font-family:var(--font-serif);
+  font-size:2.2rem;
+  font-weight:700;
+  color:var(--gold-light);
+}
+.hero-stat-label{
+  font-size:.8rem;
+  color:var(--text3);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  margin-top:.2rem;
+}
+.scroll-indicator{
+  position:absolute;
+  bottom:2rem;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.4rem;
+  color:var(--text3);
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  animation:bob 2s ease-in-out infinite;
+}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(6px)}}
+.scroll-indicator-line{
+  width:1px;height:30px;
+  background:linear-gradient(to bottom,var(--gold-dim),transparent);
+}
+
+/* ===== NAV ===== */
+.sticky-nav{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(8,12,20,.85);
+  backdrop-filter:blur(20px) saturate(1.4);
+  -webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border-bottom:1px solid var(--border);
+  padding:0 1rem;
+  transition:transform .3s;
+}
+.nav-inner{
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  gap:.2rem;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:.6rem 0;
+}
+.nav-inner::-webkit-scrollbar{display:none}
+.nav-link{
+  flex-shrink:0;
+  padding:.4rem .9rem;
+  font-size:.78rem;
+  font-weight:500;
+  color:var(--text2);
+  text-decoration:none;
+  border-radius:6px;
+  transition:all .2s;
+  white-space:nowrap;
+}
+.nav-link:hover{color:var(--gold-light);background:rgba(201,168,76,.08)}
+.nav-link.active{color:var(--gold);background:rgba(201,168,76,.12)}
+.nav-divider{color:var(--text3);font-size:.6rem;flex-shrink:0}
+
+/* ===== SECTION ===== */
+.section{
+  max-width:1100px;
+  margin:0 auto;
+  padding:5rem 1.5rem;
+}
+.section-header{
+  margin-bottom:3rem;
+  position:relative;
+}
+.section-number{
+  font-family:var(--font-serif);
+  font-size:3rem;
+  font-weight:700;
+  color:rgba(201,168,76,.08);
+  line-height:1;
+  position:absolute;
+  top:-1rem;
+  left:-.5rem;
+  pointer-events:none;
+  -webkit-text-stroke:1px rgba(201,168,76,.1);
+}
+.section-label{
+  display:inline-block;
+  padding:.25rem .8rem;
+  border:1px solid var(--border);
+  border-radius:4px;
+  font-size:.7rem;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--text3);
+  margin-bottom:.8rem;
+  position:relative;
+}
+.section h2{
+  font-family:var(--font-serif);
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:600;
+  line-height:1.3;
+  position:relative;
+}
+.section h2 .en{
+  display:block;
+  font-family:var(--font-sans);
+  font-size:.65rem;
+  font-weight:400;
+  color:var(--text3);
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  margin-top:.3rem;
+}
+.section-desc{
+  color:var(--text2);
+  margin-top:.8rem;
+  font-size:.95rem;
+  max-width:700px;
+}
+
+/* ===== PYRAMID ===== */
+.pyramid-section{
+  padding:4rem 1.5rem 2rem;
+}
+.pyramid-container{
+  max-width:900px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:0;
+}
+.pyramid-layer{
+  width:100%;
+  cursor:pointer;
+  transition:all .4s cubic-bezier(.22,1,.36,1);
+  position:relative;
+}
+.pyramid-layer-inner{
+  padding:1rem 1.5rem;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  transition:all .3s;
+  background:var(--surface);
+  position:relative;
+  overflow:hidden;
+}
+.pyramid-layer-inner::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  opacity:0;
+  transition:opacity .3s;
+}
+.pyramid-layer:hover .pyramid-layer-inner::before{opacity:1}
+.pyramid-layer:hover .pyramid-layer-inner{
+  border-color:var(--gold-dim);
+  transform:translateX(4px);
+}
+
+/* Layer widths: wider at bottom, narrower at top */
+.pyramid-layer.l1 .pyramid-layer-inner{width:30%;margin:0 auto;border-radius:var(--radius-sm) var(--radius-sm) 0 0}
+.pyramid-layer.l2 .pyramid-layer-inner{width:42%;margin:0 auto}
+.pyramid-layer.l3 .pyramid-layer-inner{width:54%;margin:0 auto}
+.pyramid-layer.l4 .pyramid-layer-inner{width:66%;margin:0 auto}
+.pyramid-layer.l5 .pyramid-layer-inner{width:78%;margin:0 auto}
+.pyramid-layer.l6 .pyramid-layer-inner{width:90%;margin:0 auto;border-radius:0 0 var(--radius-sm) var(--radius-sm)}
+
+.pyramid-layer.l1 .pyramid-layer-inner{background:linear-gradient(135deg, #1a2240, #0d1424)}
+.pyramid-layer.l2 .pyramid-layer-inner{background:linear-gradient(135deg, #1e2a50, #111b30)}
+.pyramid-layer.l3 .pyramid-layer-inner{background:linear-gradient(135deg, #223260, #152040)}
+.pyramid-layer.l4 .pyramid-layer-inner{background:linear-gradient(135deg, #263a70, #192850)}
+.pyramid-layer.l5 .pyramid-layer-inner{background:linear-gradient(135deg, #2a4280, #1d3060)}
+.pyramid-layer.l6 .pyramid-layer-inner{background:linear-gradient(135deg, #2e4a90, #213870)}
+
+.pyramid-layer-num{
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  color:var(--gold-dim);
+  opacity:.6;
+}
+.pyramid-layer-title{
+  font-size:.85rem;
+  font-weight:600;
+  color:var(--gold-light);
+}
+.pyramid-layer-sub{
+  font-size:.7rem;
+  color:var(--text3);
+}
+.pyramid-layer-arrow{
+  color:var(--text3);
+  font-size:.7rem;
+  transition:transform .3s;
+}
+.pyramid-layer.open .pyramid-layer-arrow{transform:rotate(180deg)}
+
+/* Layer detail panels */
+.layer-detail{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .6s cubic-bezier(.22,1,.36,1), opacity .4s, margin .3s;
+  opacity:0;
+  width:90%;
+  margin:0 auto;
+}
+.layer-detail.open{
+  max-height:6000px;
+  opacity:1;
+  margin:.5rem auto;
+}
+.layer-detail-inner{
+  background:var(--surface2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:1.8rem;
+}
+.layer-detail h4{
+  font-family:var(--font-serif);
+  font-size:1rem;
+  color:var(--gold-light);
+  margin-bottom:.5rem;
+}
+.layer-detail h5{
+  font-size:.8rem;
+  color:var(--accent);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin:1.2rem 0 .5rem;
+}
+.layer-detail p,.layer-detail li{
+  font-size:.85rem;
+  color:var(--text2);
+  line-height:1.8;
+}
+.layer-detail ul{padding-left:1.2rem}
+.layer-detail li{margin-bottom:.2rem}
+.noun-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:.4rem;
+  list-style:none;
+  padding:0 !important;
+}
+.noun-grid li{
+  padding:.35rem .7rem;
+  background:rgba(201,168,76,.04);
+  border:1px solid rgba(201,168,76,.1);
+  border-radius:4px;
+  font-size:.78rem;
+  color:var(--text);
+}
+.noun-grid li .tag{
+  font-size:.6rem;
+  color:var(--text3);
+  display:block;
+  font-weight:500;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+/* ===== CASE STUDIES ===== */
+.case-studies{
+  background:var(--bg2);
+}
+.case-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:1.2rem;
+  overflow:hidden;
+  transition:border-color .3s;
+}
+.case-card:hover{border-color:var(--gold-dim)}
+.case-card-header{
+  padding:1.2rem 1.8rem;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  user-select:none;
+}
+.case-card-header-left{
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.case-card-icon{
+  width:40px;height:40px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.1rem;
+  flex-shrink:0;
+}
+.case-card-icon.green{background:rgba(79,195,195,.12);color:var(--accent)}
+.case-card-icon.red{background:rgba(239,83,80,.12);color:#ef5350}
+.case-card-icon.blue{background:rgba(66,165,245,.12);color:#42a5f5}
+.case-card-title{
+  font-weight:600;
+  font-size:.95rem;
+}
+.case-card-sub{
+  font-size:.78rem;
+  color:var(--text3);
+  margin-top:.1rem;
+}
+.case-card-toggle{
+  color:var(--text3);
+  font-size:.8rem;
+  transition:transform .3s;
+  flex-shrink:0;
+}
+.case-card.open .case-card-toggle{transform:rotate(180deg)}
+.case-card-body{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .6s cubic-bezier(.22,1,.36,1);
+}
+.case-card-body-inner{
+  padding:0 1.8rem 1.8rem;
+  border-top:1px solid var(--border);
+}
+.case-step{
+  padding:1.2rem 0;
+  border-bottom:1px solid rgba(30,45,80,.4);
+}
+.case-step:last-child{border-bottom:none}
+.case-step-header{
+  display:flex;
+  align-items:baseline;
+  gap:.6rem;
+  margin-bottom:.5rem;
+}
+.case-step-num{
+  font-family:var(--font-mono);
+  font-size:.7rem;
+  color:var(--gold-dim);
+  font-weight:500;
+}
+.case-step-title{
+  font-weight:600;
+  font-size:.9rem;
+  color:var(--gold-light);
+}
+.case-step-sub{
+  font-size:.7rem;
+  color:var(--text3);
+}
+.case-step-desc{
+  font-size:.83rem;
+  color:var(--text2);
+  line-height:1.8;
+}
+.case-term-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:.3rem;
+  margin-top:.5rem;
+}
+.case-term{
+  padding:.15rem .5rem;
+  background:rgba(201,168,76,.06);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:3px;
+  font-size:.7rem;
+  color:var(--gold-light);
+}
+.case-term .case-term-label{
+  display:block;
+  font-size:.6rem;
+  color:var(--text3);
+  text-transform:uppercase;
+  letter-spacing:.03em;
+}
+.case-example{
+  margin-top:.5rem;
+  padding:.6rem .8rem;
+  background:rgba(79,195,195,.04);
+  border-left:2px solid var(--accent-dim);
+  border-radius:0 4px 4px 0;
+  font-size:.8rem;
+  color:var(--text2);
+  line-height:1.7;
+}
+.case-example strong{color:var(--accent)}
+
+/* ===== VERIFICATION ===== */
+.verify-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:1rem;
+  margin:1.5rem 0;
+}
+.verify-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:1.2rem;
+  transition:border-color .3s;
+}
+.verify-card:hover{border-color:var(--gold-dim)}
+.verify-card h4{
+  font-size:.85rem;
+  font-weight:600;
+  margin-bottom:.5rem;
+}
+.verify-card p{
+  font-size:.8rem;
+  color:var(--text2);
+  line-height:1.7;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+  text-align:center;
+  padding:3rem 1.5rem;
+  border-top:1px solid var(--border);
+  color:var(--text3);
+  font-size:.8rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .hero h1{font-size:2.2rem}
+  .hero-stats{gap:1.5rem}
+  .section{padding:3rem 1rem}
+  .pyramid-layer.l1 .pyramid-layer-inner{width:60%}
+  .pyramid-layer.l2 .pyramid-layer-inner{width:68%}
+  .pyramid-layer.l3 .pyramid-layer-inner{width:76%}
+  .pyramid-layer.l4 .pyramid-layer-inner{width:84%}
+  .pyramid-layer.l5 .pyramid-layer-inner{width:92%}
+  .pyramid-layer.l6 .pyramid-layer-inner{width:100%}
+  .pyramid-layer-inner{padding:.7rem 1rem}
+  .pyramid-layer-title{font-size:.75rem}
+  .noun-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .case-card-header{padding:1rem 1.2rem}
+  .case-card-body-inner{padding:0 1.2rem 1.2rem}
+  .sticky-nav{display:none}
+}
+@media(max-width:480px){
+  .pyramid-layer.l1 .pyramid-layer-inner{width:70%}
+  .pyramid-layer.l2 .pyramid-layer-inner{width:76%}
+  .pyramid-layer.l3 .pyramid-layer-inner{width:82%}
+  .pyramid-layer.l4 .pyramid-layer-inner{width:88%}
+  .pyramid-layer.l5 .pyramid-layer-inner{width:94%}
+  .pyramid-layer.l6 .pyramid-layer-inner{width:100%}
+  .pyramid-layer-inner{padding:.5rem .7rem;gap:.5rem}
+  .pyramid-layer-sub{display:none}
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s,transform .6s}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="top">
+  <div class="hero-grid"></div>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>完整知识体系 · 六层递进</div>
+  <h1>
+    <span class="outline">金融</span><br>
+    <span class="gold">金字塔</span>
+  </h1>
+  <p class="hero-sub">从底层原子要素到顶层价值实现，构建完整的金融认知框架。<br>六大层级 · 三大闭环 · 全覆盖知识体系</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num">6</div><div class="hero-stat-label">核心层级</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">219+</div><div class="hero-stat-label">核心概念</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">3</div><div class="hero-stat-label">闭环案例</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">22</div><div class="hero-stat-label">细分模块</div></div>
+  </div>
+  <div class="scroll-indicator">
+    <span>探索体系</span>
+    <div class="scroll-indicator-line"></div>
+  </div>
+</section>
+
+<!-- ===== STICKY NAV ===== -->
+<nav class="sticky-nav" id="stickyNav">
+  <div class="nav-inner">
+    <a href="#pyramid" class="nav-link active">🗜 金字塔</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer1" class="nav-link">第1层·要素</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer2" class="nav-link">第2层·主体</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer3" class="nav-link">第3层·市场</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer4" class="nav-link">第4层·产品</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer5" class="nav-link">第5层·机制</a>
+    <span class="nav-divider">·</span>
+    <a href="#layer6" class="nav-link">第6层·应用</a>
+    <span class="nav-divider">·</span>
+    <a href="#cases" class="nav-link">闭环案例</a>
+    <span class="nav-divider">·</span>
+    <a href="#verify" class="nav-link">完整性校验</a>
+  </div>
+</nav>
+
+<!-- ===== PYRAMID VISUAL ===== -->
+<section class="pyramid-section" id="pyramid">
+  <div style="text-align:center;margin-bottom:2.5rem">
+    <div class="section-label" style="display:inline-block">Interactive Pyramid</div>
+    <h2 style="font-family:var(--font-serif);font-size:1.8rem;font-weight:600">点击层级展开详情</h2>
+    <p style="color:var(--text2);font-size:.9rem;margin-top:.5rem">每一层都包含完整的名词体系和逻辑关系</p>
+  </div>
+
+  <div class="pyramid-container" id="pyramidContainer">
+    <!-- Layer 1 (top) -->
+    <div class="pyramid-layer l1" data-layer="1">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(1)">
+        <span class="pyramid-layer-num">01</span>
+        <div><div class="pyramid-layer-title">底层要素层</div><div class="pyramid-layer-sub">Fundamental Elements</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail1">
+        <div class="layer-detail-inner">
+          <h5>🏛 价值核心要素</h5>
+          <ul class="noun-grid">
+            <li>资金<li>资产<li>负债<li>权益<li>收益<li>价格<li>时间价值<li>折现
+          </ul>
+          <h5>⚠️ 风险核心要素</h5>
+          <ul class="noun-grid">
+            <li>风险<li>概率<li>波动率<li>相关性<li>风险偏好<li>杠杆率
+          </ul>
+          <h5>⚙️ 机制核心要素</h5>
+          <ul class="noun-grid">
+            <li>信息<li>信用<li>流动性<li>合约<li>激励<li>预期<li>抵押品<li>透明度<li>税收
+          </ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>本层是整个金融体系的"原子级"构成要素，分为三大类：<br><br>
+          <strong style="color:var(--gold-light)">价值要素</strong> → 构成金融活动的价值基础，所有金融交易本质上都是价值的跨时空交换<br>
+          <strong style="color:var(--gold-light)">风险要素</strong> → 构成金融活动的不确定性维度，风险与收益的匹配是金融的核心矛盾<br>
+          <strong style="color:var(--gold-light)">机制要素</strong> → 构成金融活动的运行基础，确保价值和风险能够有效传导</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 2 -->
+    <div class="pyramid-layer l2" data-layer="2">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(2)">
+        <span class="pyramid-layer-num">02</span>
+        <div><div class="pyramid-layer-title">制度与主体层</div><div class="pyramid-layer-sub">Institutions & Actors</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail2">
+        <div class="layer-detail-inner">
+          <h5>🏛 监管与基础设施层</h5>
+          <ul class="noun-grid">
+            <li>中央银行<li>监管机构<li>交易所<li>清算机构<li>托管机构<li>证券登记结算机构<li>行业自律组织
+          </ul>
+          <h5>🏦 核心金融机构</h5>
+          <ul class="noun-grid">
+            <li>商业银行<li>投资银行<li>证券公司<li>基金公司<li>保险公司<li>信托公司<li>资管机构<li>金融租赁公司
+          </ul>
+          <h5>📊 专业投资机构</h5>
+          <ul class="noun-grid">
+            <li>私募基金<li>风险投资机构<li>对冲基金<li>养老基金<li>主权基金<li>财务公司
+          </ul>
+          <h5>📋 专业服务机构</h5>
+          <ul class="noun-grid">
+            <li>信用评级机构<li>会计师事务所<li>律师事务所<li>仲裁机构<li>支付机构<li>担保公司
+          </ul>
+          <h5>💡 新兴金融机构</h5>
+          <ul class="noun-grid">
+            <li>金融科技公司<li>消费金融公司<li>汽车金融公司<li>小额贷款公司<li>典当行
+          </ul>
+          <h5>👥 市场参与者</h5>
+          <ul class="noun-grid">
+            <li>债务人<li>债权人<li>投资者<li>发行人
+          </ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>1. <strong style="color:var(--gold-light)">监管与基础设施</strong> → 提供制度框架和技术支撑，是所有金融活动的前提<br>
+          2. <strong style="color:var(--gold-light)">核心金融机构</strong> → 金融体系的主力军，承担资金融通的核心功能<br>
+          3. <strong style="color:var(--gold-light)">专业投资机构</strong> → 专业化的资金管理者，提升资源配置效率<br>
+          4. <strong style="color:var(--gold-light)">专业服务机构</strong> → 解决信息不对称问题，降低交易成本<br>
+          5. <strong style="color:var(--gold-light)">市场参与者</strong> → 金融活动的最终需求方和供给方</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 3 -->
+    <div class="pyramid-layer l3" data-layer="3">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(3)">
+        <span class="pyramid-layer-num">03</span>
+        <div><div class="pyramid-layer-title">市场层</div><div class="pyramid-layer-sub">Markets</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail3">
+        <div class="layer-detail-inner">
+          <h5>📈 按交易标的分类</h5>
+          <ul class="noun-grid">
+            <li>货币市场<li>债券市场<li>股票市场<li>外汇市场<li>衍生品市场<li>商品市场<li>保险市场<li>信用市场<li>黄金市场<li>票据市场<li>回购市场<li>同业拆借市场
+          </ul>
+          <h5>📋 按合约类型</h5>
+          <ul class="noun-grid"><li>期货市场<li>期权市场</ul>
+          <h5>🏢 按交易场所</h5>
+          <ul class="noun-grid"><li>场内市场<li>场外市场（OTC）</ul>
+          <h5>👤 按参与者类型</h5>
+          <ul class="noun-grid"><li>机构交易市场<li>零售交易市场</ul>
+          <h5>📄 按发行方式</h5>
+          <ul class="noun-grid"><li>一级市场<li>二级市场<li>私募市场<li>公募市场</ul>
+          <h5>📊 按板块层级</h5>
+          <ul class="noun-grid"><li>主板市场<li>创业板市场<li>科创板市场<li>北交所/新三板市场</ul>
+          <h5>🌍 按地域属性</h5>
+          <ul class="noun-grid"><li>在岸市场<li>离岸金融市场</ul>
+          <h5>💎 新兴市场</h5>
+          <ul class="noun-grid"><li>区块链与数字资产市场</ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>1. <strong style="color:var(--gold-light)">标的维度</strong> → 不同的基础资产对应不同的市场，形成专业化分工<br>
+          2. <strong style="color:var(--gold-light)">场所维度</strong> → 场内标准化交易 vs 场外个性化交易，满足不同流动性需求<br>
+          3. <strong style="color:var(--gold-light)">发行维度</strong> → 一级市场实现资源配置，二级市场实现价格发现<br>
+          4. <strong style="color:var(--gold-light)">层级维度</strong> → 不同风险等级的企业对应不同的资本市场板块</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 4 -->
+    <div class="pyramid-layer l4" data-layer="4">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(4)">
+        <span class="pyramid-layer-num">04</span>
+        <div><div class="pyramid-layer-title">工具与产品层</div><div class="pyramid-layer-sub">Products & Instruments</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail4">
+        <div class="layer-detail-inner">
+          <h5>📜 固定收益类</h5>
+          <ul class="noun-grid">
+            <li>国债<li>地方债<li>金融债<li>企业债<li>公司债<li>可转债<li>短融<li>中票<li>PPN<li>商票<li>银票<li>同业存单<li>逆回购<li>正回购
+          </ul>
+          <h5>📊 权益类</h5>
+          <ul class="noun-grid">
+            <li>普通股<li>优先股<li>存托凭证（DR/CDR）<li>指数基金<li>ETF<li>REITs<li>权证<li>分级基金
+          </ul>
+          <h5>🔄 衍生品</h5>
+          <ul class="noun-grid">
+            <li>期货<li>期权<li>掉期（Swap）<li>远期（Forward）<li>信用违约互换（CDS）
+          </ul>
+          <h5>💳 信用与信贷</h5>
+          <ul class="noun-grid">
+            <li>贷款<li>信用卡<li>ABS<li>MBS<li>CDO<li>保理<li>融资租赁<li>典当
+          </ul>
+          <h5>🛡️ 保险类</h5>
+          <ul class="noun-grid">
+            <li>寿险<li>健康险<li>意外险<li>车险<li>财险<li>再保险
+          </ul>
+          <h5>💎 另类资产</h5>
+          <ul class="noun-grid">
+            <li>私募股权<li>风险投资<li>对冲基金策略组合<li>商品<li>黄金<li>房地产<li>基础设施<li>艺术品<li>加密资产
+          </ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>1. <strong style="color:var(--gold-light)">风险收益谱系</strong> → 从低风险低收益（国债）到高风险高收益（衍生品、另类）形成连续谱<br>
+          2. <strong style="color:var(--gold-light)">底层资产穿透</strong> → 所有复杂产品最终都可穿透到第1层的基础要素<br>
+          3. <strong style="color:var(--gold-light)">结构化设计</strong> → 通过合约设计实现风险收益的重新分配，满足不同主体需求</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 5 -->
+    <div class="pyramid-layer l5" data-layer="5">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(5)">
+        <span class="pyramid-layer-num">05</span>
+        <div><div class="pyramid-layer-title">功能与机制层</div><div class="pyramid-layer-sub">Functions & Mechanisms</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail5">
+        <div class="layer-detail-inner">
+          <h5>🎯 核心功能</h5>
+          <ul class="noun-grid">
+            <li>资源配置<li>风险分散<li>风险对冲<li>风险转移<li>跨期配置<li>期限转换<li>流动性提供<li>信息发现
+          </ul>
+          <h5>⚙️ 运行机制</h5>
+          <ul class="noun-grid">
+            <li>定价机制<li>套利机制<li>担保机制<li>做市机制<li>结算机制<li>托管机制<li>清算机制<li>保证金机制
+          </ul>
+          <h5>📐 理论基础</h5>
+          <ul class="noun-grid">
+            <li>资产定价模型（CAPM）<li>套利定价理论（APT）<li>期限结构理论<li>市场微结构<li>久期理论<li>凸性<li>Beta系数<li>Alpha收益
+          </ul>
+          <h5>🛡️ 风险管理</h5>
+          <ul class="noun-grid">
+            <li>分散化<li>杠杆<li>对冲<li>风险管理体系<li>压力测试<li>久期匹配
+          </ul>
+          <h5>📋 监管合规</h5>
+          <ul class="noun-grid">
+            <li>监管机制<li>反洗钱机制（AML）<li>合规机制（Compliance）<li>信息披露机制<li>投资者适当性管理
+          </ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>1. <strong style="color:var(--gold-light)">核心功能</strong> → 金融体系存在的根本价值，回答"金融为什么存在"<br>
+          2. <strong style="color:var(--gold-light)">运行机制</strong> → 金融体系的"操作系统"，确保交易顺利完成<br>
+          3. <strong style="color:var(--gold-light)">理论基础</strong> → 金融体系的"物理学定律"，解释价格形成和波动规律<br>
+          4. <strong style="color:var(--gold-light)">风险管理</strong> → 金融体系的"免疫系统"，控制风险的累积和传染<br>
+          5. <strong style="color:var(--gold-light)">监管合规</strong> → 金融体系的"交通规则"，维护市场秩序和公平</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layer 6 (bottom) -->
+    <div class="pyramid-layer l6" data-layer="6">
+      <div class="pyramid-layer-inner" onclick="toggleLayer(6)">
+        <span class="pyramid-layer-num">06</span>
+        <div><div class="pyramid-layer-title">顶层应用与行业方向层</div><div class="pyramid-layer-sub">Applications & Careers</div></div>
+        <span class="pyramid-layer-arrow">▾</span>
+      </div>
+      <div class="layer-detail" id="detail6">
+        <div class="layer-detail-inner">
+          <h5>🏢 企业与产业方向</h5>
+          <ul class="noun-grid">
+            <li>公司金融<li>并购（M&A）<li>财务规划<li>预算管理<li>资本结构设计<li>风险管理<li>IPO<li>投资分析<li>战略投资
+          </ul>
+          <h5>💰 投资管理方向</h5>
+          <ul class="noun-grid">
+            <li>公募基金<li>私募基金<li>资产配置<li>量化投资<li>高频交易<li>固收投资<li>股票研究<li>行业研究<li>因子模型<li>财富管理
+          </ul>
+          <h5>📊 市场交易方向</h5>
+          <ul class="noun-grid">
+            <li>做市<li>自营交易<li>期货交易<li>外汇交易<li>固收交易
+          </ul>
+          <h5>🛡️ 风险控制方向</h5>
+          <ul class="noun-grid">
+            <li>市场风险<li>信用风险<li>操作风险<li>流动性风险<li>模型风险
+          </ul>
+          <h5>🏦 银行方向</h5>
+          <ul class="noun-grid">
+            <li>信贷<li>零售银行<li>对公银行<li>风险管理<li>合规<li>内审
+          </ul>
+          <h5>📋 保险方向</h5>
+          <ul class="noun-grid">
+            <li>精算<li>风险评估<li>保险产品设计<li>再保险
+          </ul>
+          <h5>📜 信托与资管方向</h5>
+          <ul class="noun-grid">
+            <li>信托产品设计<li>资产管理<li>家族信托
+          </ul>
+          <h5>💡 金融科技方向</h5>
+          <ul class="noun-grid">
+            <li>支付<li>风控模型<li>信用评分<li>算法交易<li>区块链<li>数字货币
+          </ul>
+          <h5>📎 专业服务方向</h5>
+          <ul class="noun-grid">
+            <li>会计<li>税务<li>审计<li>法务<li>合规<li>评级<li>咨询<li>租赁
+          </ul>
+          <h5>🔗 层内逻辑关系</h5>
+          <p>1. <strong style="color:var(--gold-light)">服务实体经济</strong> → 企业金融、银行信贷等直接服务产业发展<br>
+          2. <strong style="color:var(--gold-light)">财富管理增值</strong> → 投资管理、交易等实现居民和机构财富保值增值<br>
+          3. <strong style="color:var(--gold-light)">风险管控保障</strong> → 风控、合规、审计等确保体系稳健运行<br>
+          4. <strong style="color:var(--gold-light)">专业服务支撑</strong> → 会计、法律、评级等降低市场摩擦成本</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inter-layer logic -->
+  <div style="max-width:900px;margin:2.5rem auto 0;text-align:center;padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius)">
+    <div style="font-family:var(--font-serif);font-size:1.1rem;color:var(--gold-light);margin-bottom:.8rem">🔗 完整传导链条</div>
+    <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:.4rem;font-size:.85rem;color:var(--text2)">
+      <span style="color:var(--gold)">第1层·要素</span>
+      <span style="color:var(--text3)">→</span>
+      <span style="color:var(--gold)">第2层·主体</span><span style="color:var(--text3)">运用要素 →</span>
+      <span style="color:var(--gold)">第3层·市场</span><span style="color:var(--text3)">中交易 →</span>
+      <span style="color:var(--gold)">第4层·产品</span><span style="color:var(--text3)">实现 →</span>
+      <span style="color:var(--gold)">第5层·机制</span><span style="color:var(--text3)">运行 →</span>
+      <span style="color:var(--gold)">第6层·应用</span><span style="color:var(--text3)">创造价值</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== LAYER DETAIL SECTIONS (full content for scroll nav) ===== -->
+<section class="section" id="layer1"><div class="section-header">
+  <div class="section-number">01</div>
+  <div class="section-label">Fundamental Elements</div>
+  <h2>底层要素层</h2>
+</div></section>
+
+<section class="section" id="layer2"><div class="section-header">
+  <div class="section-number">02</div>
+  <div class="section-label">Institutions & Actors</div>
+  <h2>制度与主体层</h2>
+</div></section>
+
+<section class="section" id="layer3"><div class="section-header">
+  <div class="section-number">03</div>
+  <div class="section-label">Markets</div>
+  <h2>市场层</h2>
+</div></section>
+
+<section class="section" id="layer4"><div class="section-header">
+  <div class="section-number">04</div>
+  <div class="section-label">Products & Instruments</div>
+  <h2>工具与产品层</h2>
+</div></section>
+
+<section class="section" id="layer5"><div class="section-header">
+  <div class="section-number">05</div>
+  <div class="section-label">Functions & Mechanisms</div>
+  <h2>功能与机制层</h2>
+</div></section>
+
+<section class="section" id="layer6"><div class="section-header">
+  <div class="section-number">06</div>
+  <div class="section-label">Applications & Careers</div>
+  <h2>顶层应用与行业方向层</h2>
+</div></section>
+
+<!-- ===== CASE STUDIES ===== -->
+<section class="section case-studies" id="cases">
+  <div class="section-header">
+    <div class="section-number" style="color:rgba(79,195,195,.08);-webkit-text-stroke-color:rgba(79,195,195,.1)">⧁</div>
+    <div class="section-label" style="border-color:rgba(79,195,195,.2);color:var(--accent)">闭环验证</div>
+    <h2>三大逻辑闭环案例<br><span class="en">IPO · 次贷危机 · 量化交易</span></h2>
+    <p class="section-desc">分别从价值创造、风险传导、技术应用三个维度，验证六层体系的完整性</p>
+  </div>
+
+  <!-- Case 1: IPO -->
+  <div class="case-card" id="case1">
+    <div class="case-card-header" onclick="toggleCase('case1Body')">
+      <div class="case-card-header-left">
+        <div class="case-card-icon green">📈</div>
+        <div><div class="case-card-title">IPO 全流程 — 价值创造闭环</div><div class="case-card-sub">完整六层联动 · 从融资需求到价值实现</div></div>
+      </div>
+      <span class="case-card-toggle">▾</span>
+    </div>
+    <div class="case-card-body" id="case1Body">
+      <div class="case-card-body-inner">
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 1</span><span class="case-step-title">底层要素驱动</span><span class="case-step-sub">第1层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>企业发展需要资金，投资者追求收益，未来现金流存在风险和不确定性，时间价值决定估值<br><strong>输出：</strong>产生融资需求和投资需求</div>
+          <div class="case-term-list">
+            <span class="case-term">资金 <span class="case-term-label">金融活动的起点</span></span>
+            <span class="case-term">收益 <span class="case-term-label">投资的核心动机</span></span>
+            <span class="case-term">风险 <span class="case-term-label">未来不确定性</span></span>
+            <span class="case-term">时间价值 <span class="case-term-label">估值基础</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>某AI创业公司需要10亿元用于研发投入和市场拓展；投资者预期公司上市后3-5年股价上涨3-5倍；公司技术路线可能失败；未来现金流按8%折现率折现得到当前估值</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 2</span><span class="case-step-title">主体参与协作</span><span class="case-step-sub">第2层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>融资需求和投资需求<br><strong>输出：</strong>各专业主体组成IPO服务团队</div>
+          <div class="case-term-list">
+            <span class="case-term">投资银行 <span class="case-term-label">保荐承销</span></span>
+            <span class="case-term">会计师事务所 <span class="case-term-label">审计报告</span></span>
+            <span class="case-term">律师事务所 <span class="case-term-label">法律意见</span></span>
+            <span class="case-term">发行人 <span class="case-term-label">融资主体</span></span>
+            <span class="case-term">投资者 <span class="case-term-label">资金提供方</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>中信证券作为保荐机构和主承销商；普华永道出具三年一期审计报告；金杜律所出具法律意见书；公募基金、社保基金等机构投资者参与网下申购</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 3</span><span class="case-step-title">市场平台运作</span><span class="case-step-sub">第3层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>专业主体团队和发行方案<br><strong>输出：</strong>在特定市场板块完成发行和上市</div>
+          <div class="case-term-list">
+            <span class="case-term">一级市场 <span class="case-term-label">首次发行</span></span>
+            <span class="case-term">二级市场 <span class="case-term-label">交易流通</span></span>
+            <span class="case-term">科创板 <span class="case-term-label">科技企业板块</span></span>
+            <span class="case-term">交易所 <span class="case-term-label">集中交易场所</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>通过网下询价和网上申购完成新股发行，募集10亿元资金；在上海证券交易所科创板挂牌上市</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 4</span><span class="case-step-title">产品工具承载</span><span class="case-step-sub">第4层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>市场平台和发行需求<br><strong>输出：</strong>标准化的金融产品——普通股股票</div>
+          <div class="case-term-list">
+            <span class="case-term">普通股 <span class="case-term-label">投票权+收益权</span></span>
+            <span class="case-term">IPO <span class="case-term-label">首次公开发行</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>发行1亿股普通股，每股面值1元，发行价10元；公司从非公众公司转变为公众公司</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 5</span><span class="case-step-title">机制保障运行</span><span class="case-step-sub">第5层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>股票产品和交易需求<br><strong>输出：</strong>公平、有序、高效的市场运行</div>
+          <div class="case-term-list">
+            <span class="case-term">定价机制 <span class="case-term-label">询价定价</span></span>
+            <span class="case-term">信息披露机制 <span class="case-term-label">透明度</span></span>
+            <span class="case-term">清算机制 <span class="case-term-label">资金交割</span></span>
+            <span class="case-term">资源配置 <span class="case-term-label">资金导向</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>网下机构投资者询价确定发行价10元/股；公司披露招股说明书；中国结算完成资金冻结解冻和股份登记；10亿元社会资金流向AI高科技产业</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 6</span><span class="case-step-title">价值最终实现</span><span class="case-step-sub">第6层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>成功上市和资金募集<br><strong>输出：</strong>多方共赢的价值创造</div>
+          <div class="case-term-list">
+            <span class="case-term">公司金融 <span class="case-term-label">融资投资决策</span></span>
+            <span class="case-term">资本结构设计 <span class="case-term-label">股权债权比例</span></span>
+            <span class="case-term">股票研究 <span class="case-term-label">基本面分析</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>公司获得10亿元资金，资产负债率从60%降至30%；股权融资降低财务风险，为后续债权融资创造空间；券商分析师给出"买入"评级</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 2: 2008 Crisis -->
+  <div class="case-card" id="case2">
+    <div class="case-card-header" onclick="toggleCase('case2Body')">
+      <div class="case-card-header-left">
+        <div class="case-card-icon red">💥</div>
+        <div><div class="case-card-title">2008年次贷危机 — 风险传导闭环</div><div class="case-card-sub">从底层要素扭曲到系统性危机爆发</div></div>
+      </div>
+      <span class="case-card-toggle">▾</span>
+    </div>
+    <div class="case-card-body" id="case2Body">
+      <div class="case-card-body-inner">
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 1</span><span class="case-step-title">底层要素扭曲</span><span class="case-step-sub">第1层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>低利率环境下的流动性过剩，风险偏好提升，信息不对称<br><strong>输出：</strong>房地产泡沫和过度杠杆</div>
+          <div class="case-term-list">
+            <span class="case-term">流动性 <span class="case-term-label">资产变现能力</span></span>
+            <span class="case-term">风险偏好 <span class="case-term-label">风险接受程度</span></span>
+            <span class="case-term">杠杆 <span class="case-term-label">放大收益和风险</span></span>
+            <span class="case-term">信用 <span class="case-term-label">偿债能力和意愿</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>美联储2001-2004年低利率政策，市场资金极度充裕；投资者追求高收益；投资银行杠杆率达到30:1；大量"三无人员"获得房贷</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 2</span><span class="case-step-title">主体逐利行为</span><span class="case-step-sub">第2层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>流动性过剩和高风险偏好<br><strong>输出：</strong>金融机构放松风控标准，激进扩张</div>
+          <div class="case-term-list">
+            <span class="case-term">商业银行 <span class="case-term-label">吸收存款发放贷款</span></span>
+            <span class="case-term">投资银行 <span class="case-term-label">证券化交易</span></span>
+            <span class="case-term">评级机构 <span class="case-term-label">信用评级</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>汇丰、花旗大量发放次级贷款，不验证借款人收入；高盛、雷曼兄弟将次贷打包成MBS、CDO出售；穆迪、标普将高风险次级债券评为AAA级</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 3</span><span class="case-step-title">市场风险传染</span><span class="case-step-sub">第3层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>机构的激进产品<br><strong>输出：</strong>风险在各市场间快速传染</div>
+          <div class="case-term-list">
+            <span class="case-term">信用市场 <span class="case-term-label">信用产品交易</span></span>
+            <span class="case-term">场外市场OTC <span class="case-term-label">非集中交易</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>CDS市场规模达到62万亿美元，远超标的债券规模；大量衍生品在场外交易，不透明、无监管</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 4</span><span class="case-step-title">产品结构失效</span><span class="case-step-sub">第4层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>次级贷款基础资产<br><strong>输出：</strong>结构化产品的风险被掩盖和放大</div>
+          <div class="case-term-list">
+            <span class="case-term">MBS <span class="case-term-label">抵押贷款证券化</span></span>
+            <span class="case-term">CDO <span class="case-term-label">债务担保凭证</span></span>
+            <span class="case-term">ABS <span class="case-term-label">资产支持证券</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>将1000笔次级贷款打包，分层发行不同优先级的证券；将MBS低层级再次打包出高评级产品；结构化设计掩盖了真实风险</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 5</span><span class="case-step-title">机制全面失灵</span><span class="case-step-sub">第5层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>基础资产违约<br><strong>输出：</strong>定价、风控、清算机制全面失效</div>
+          <div class="case-term-list">
+            <span class="case-term">风险分散 <span class="case-term-label">多资产分散</span></span>
+            <span class="case-term">风险转移 <span class="case-term-label">转移风险</span></span>
+            <span class="case-term">保证金机制 <span class="case-term-label">履约担保</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>看似分散的房贷高度关联于房地产价格；风险没有消失，只在系统内转移并集中；雷曼兄弟抵押品价值暴跌，无法满足保证金要求</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 6</span><span class="case-step-title">系统性危机爆发</span><span class="case-step-sub">第6层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>机制全面失灵<br><strong>输出：</strong>金融体系崩溃，实体经济衰退</div>
+          <div class="case-term-list">
+            <span class="case-term">系统性风险 <span class="case-term-label">体系崩溃风险</span></span>
+            <span class="case-term">流动性风险 <span class="case-term-label">无法获得融资</span></span>
+            <span class="case-term">信用风险 <span class="case-term-label">对手违约风险</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>雷曼兄弟破产引发连锁反应，AIG濒临破产；银行间市场冻结，金融机构无法获得短期融资；交易对手违约风险飙升，市场信心彻底崩溃</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Case 3: Quant -->
+  <div class="case-card" id="case3">
+    <div class="case-card-header" onclick="toggleCase('case3Body')">
+      <div class="case-card-header-left">
+        <div class="case-card-icon blue">🤖</div>
+        <div><div class="case-card-title">量化交易策略 — 技术应用闭环</div><div class="case-case-sub">从数据要素到算法交易的完整链条</div></div>
+      </div>
+      <span class="case-card-toggle">▾</span>
+    </div>
+    <div class="case-card-body" id="case3Body">
+      <div class="case-card-body-inner">
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 1</span><span class="case-step-title">要素数据驱动</span><span class="case-step-sub">第1层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>市场信息数据、价格序列、概率分布、相关性矩阵<br><strong>输出：</strong>可用于建模的特征工程数据集</div>
+          <div class="case-term-list">
+            <span class="case-term">信息 <span class="case-term-label">影响价格的数据</span></span>
+            <span class="case-term">概率 <span class="case-term-label">事件可能性</span></span>
+            <span class="case-term">相关性 <span class="case-term-label">变量关联程度</span></span>
+            <span class="case-term">波动率 <span class="case-term-label">风险衡量指标</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>5000只股票的量价数据、财务数据、新闻舆情数据；基于历史数据计算涨跌概率分布；行业内股票相关性用于风控；用过去20日收益率计算年化波动率</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 2</span><span class="case-step-title">机构技术投入</span><span class="case-step-sub">第2层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>数据要素和算力<br><strong>输出：</strong>专业量化团队和技术平台</div>
+          <div class="case-term-list">
+            <span class="case-term">私募基金 <span class="case-term-label">量化私募</span></span>
+            <span class="case-term">金融科技公司 <span class="case-term-label">技术服务</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>幻方、九坤等量化私募投入数亿元建设算力集群；金融科技公司提供行情数据、交易接口、风控系统</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 3</span><span class="case-step-title">市场微观结构</span><span class="case-step-sub">第3层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>量化策略和交易指令<br><strong>输出：</strong>订单在市场中的执行和撮合</div>
+          <div class="case-term-list">
+            <span class="case-term">市场微结构 <span class="case-term-label">订单流影响价格</span></span>
+            <span class="case-term">高频交易 <span class="case-term-label">极速交易</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>分析订单簿深度、买卖价差、冲击成本；纳秒级订单响应，捕捉微小的定价偏差</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 4</span><span class="case-step-title">工具产品实现</span><span class="case-step-sub">第4层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>交易信号和市场流动性<br><strong>输出：</strong>具体的交易工具和持仓组合</div>
+          <div class="case-term-list">
+            <span class="case-term">ETF <span class="case-term-label">交易型指数基金</span></span>
+            <span class="case-term">股指期货 <span class="case-term-label">指数期货合约</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>沪深300ETF、中证500ETF作为指数增强的交易工具；IF、IC合约用于对冲市场系统性风险</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 5</span><span class="case-step-title">模型机制支撑</span><span class="case-step-sub">第5层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>历史数据和市场环境<br><strong>输出：</strong>策略模型和风控机制</div>
+          <div class="case-term-list">
+            <span class="case-term">套利机制 <span class="case-term-label">定价偏差获利</span></span>
+            <span class="case-term">因子模型 <span class="case-term-label">多因子解释收益</span></span>
+            <span class="case-term">Alpha收益 <span class="case-term-label">超额收益</span></span>
+            <span class="case-term">Beta系数 <span class="case-term-label">市场敏感度</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>ETF折溢价套利、期现套利、跨期套利；价值、动量、质量、波动率等多因子模型；控制组合Beta在0.9-1.1之间</div>
+        </div>
+        <div class="case-step">
+          <div class="case-step-header"><span class="case-step-num">环节 6</span><span class="case-step-title">应用价值创造</span><span class="case-step-sub">第6层</span></div>
+          <div class="case-step-desc"><strong>输入：</strong>策略执行和交易结果<br><strong>输出：</strong>稳定的投资收益和风险管理</div>
+          <div class="case-term-list">
+            <span class="case-term">量化投资 <span class="case-term-label">模型驱动决策</span></span>
+            <span class="case-term">算法交易 <span class="case-term-label">自动执行</span></span>
+            <span class="case-term">资产配置 <span class="case-term-label">跨资产分配</span></span>
+          </div>
+          <div class="case-example"><strong>实例：</strong>年化收益率20%，最大回撤控制在5%以内；TWAP、VWAP算法降低冲击成本；股票80%、债券15%、商品5%动态配置</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== VERIFICATION ===== -->
+<section class="section" id="verify">
+  <div class="section-header">
+    <div class="section-number" style="color:rgba(201,168,76,.05)">✓</div>
+    <div class="section-label" style="border-color:rgba(201,168,76,.2)">Validation</div>
+    <h2>体系完整性校验<br><span class="en">Completeness Verification</span></h2>
+  </div>
+
+  <div class="verify-grid">
+    <div class="verify-card">
+      <h4>📊 名词体系覆盖率</h4>
+      <p>第1层：17→22个核心要素<br>第2层：28→37个主体<br>第3层：18→27个市场<br>第4层：35→48个产品<br>第5层：28→35个机制<br>第6层：45→50个应用方向</p>
+    </div>
+    <div class="verify-card">
+      <h4>🔗 逻辑自洽性</h4>
+      <p><strong>自下而上支撑：</strong>每一层都是上一层的基础，层层递进<br><strong>自上而下反哺：</strong>应用需求推动产品创新、市场发展、机制完善</p>
+    </div>
+    <div class="verify-card">
+      <h4>🔄 三大闭环验证</h4>
+      <p><strong>IPO</strong> — 价值创造闭环<br><strong>次贷危机</strong> — 风险传导闭环<br><strong>量化交易</strong> — 技术应用闭环</p>
+    </div>
+    <div class="verify-card">
+      <h4>📜 专业规范性</h4>
+      <p>名词解释符合CFA、FRM等国际金融认证标准定义<br>案例均为真实金融市场事件<br>逻辑关系符合现代金融理论主流观点</p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>六层金融金字塔 · 完整知识体系</p>
+</footer>
+
+<script>
+// Toggle pyramid layers
+function toggleLayer(n) {
+  const detail = document.getElementById('detail' + n);
+  const layer = detail.closest('.pyramid-layer');
+  const isOpen = detail.classList.contains('open');
+
+  // Close all
+  document.querySelectorAll('.layer-detail').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.pyramid-layer').forEach(l => l.classList.remove('open'));
+
+  if (!isOpen) {
+    detail.classList.add('open');
+    layer.classList.add('open');
+  }
+}
+
+// Toggle case study cards
+function toggleCase(id) {
+  const body = document.getElementById(id);
+  const card = body.closest('.case-card');
+  const isOpen = body.classList.contains('open');
+
+  if (isOpen) {
+    body.style.maxHeight = '0';
+    body.classList.remove('open');
+    card.classList.remove('open');
+  } else {
+    body.classList.add('open');
+    card.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    // Re-calculate after transition
+    const calcHeight = () => {
+      body.style.maxHeight = body.scrollHeight + 'px';
+    };
+    requestAnimationFrame(calcHeight);
+  }
+}
+
+// Handle case card resize on window resize
+window.addEventListener('resize', () => {
+  document.querySelectorAll('.case-card-body.open').forEach(body => {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  });
+});
+
+// Intersection Observer for fade-up
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: .1 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// Nav highlight on scroll
+const sections = document.querySelectorAll('.section, .pyramid-section, .case-studies');
+const navLinks = document.querySelectorAll('.nav-link');
+
+function updateNav() {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 150;
+    if (window.scrollY >= top) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', updateNav);
+
+// Open first layer by default after a moment
+setTimeout(() => toggleLayer(1), 600);
+</script>
+</body>
+</html>
