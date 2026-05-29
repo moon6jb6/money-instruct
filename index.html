@@ -616,15 +616,6 @@ body{
 .noun-grid li{cursor:help;position:relative;border-bottom:1px dashed rgba(201,168,76,.15);transition:border-color .2s}
 .noun-grid li:hover{border-bottom-color:var(--gold-dim);color:var(--gold-light)}
 
-
-/* ===== Knowledge Tooltip ===== */
-.knowledge-tip{position:fixed;z-index:9999;max-width:380px;background:rgba(12,20,40,.96);border:1px solid var(--gold-dim);border-radius:8px;padding:.7rem .9rem;font-size:.8rem;line-height:1.6;color:var(--text2);pointer-events:none;opacity:0;transition:opacity .15s;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.5)}
-.knowledge-tip.show{opacity:1}
-.knowledge-tip .tip-term{color:var(--gold-light);font-weight:600}
-.knowledge-tip .tip-layer{color:var(--text3);font-size:.7rem;margin-top:.25rem;font-style:italic}
-.noun-grid li{cursor:help;position:relative;border-bottom:1px dashed rgba(201,168,76,.15);transition:border-color .2s}
-.noun-grid li:hover{border-bottom-color:var(--gold-dim);color:var(--gold-light)}
-
 </style>
 </head>
 <body>
@@ -1287,7 +1278,7 @@ body{
     <div class="case-card-header" onclick="toggleCase('case3Body')">
       <div class="case-card-header-left">
         <div class="case-card-icon blue">🤖</div>
-        <div><div class="case-card-title">量化交易策略 — 技术应用闭环</div><div class="case-case-sub">从数据要素到算法交易的完整链条</div></div>
+        <div><div class="case-card-title">量化交易策略 — 技术应用闭环</div><div class="case-card-sub">从数据要素到算法交易的完整链条</div></div>
       </div>
       <span class="case-card-toggle">▾</span>
     </div>
@@ -1529,12 +1520,11 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 // Nav highlight on scroll
-const sections = document.querySelectorAll('.section, .pyramid-section, .case-studies');
 const navLinks = document.querySelectorAll('.nav-link');
 
 function updateNav() {
   let current = '';
-  sections.forEach(section => {
+  document.querySelectorAll('.section, .pyramid-section, .case-studies, .pyramid-layer').forEach(section => {
     const top = section.offsetTop - 150;
     if (window.scrollY >= top) {
       current = section.getAttribute('id');
@@ -1549,11 +1539,12 @@ function updateNav() {
   });
 }
 
+updateNav();
 window.addEventListener('scroll', updateNav);
 
 // Open first layer by default after a moment
-setTimeout(() => toggleLayer(1), 600);
-
+setTimeout(() => { if (!document.querySelector('.layer-detail.open')) toggleLayer(1); }, 600);
+</script>
 <script>
 const DICT = {
 "资金": "社会再生产过程中各种物资的货币表现，是金融活动的基本载体，具有流动性、收益性和风险性三大特征",
@@ -1788,9 +1779,9 @@ tip.className = 'knowledge-tip';
 document.body.appendChild(tip);
 
 // Show tooltip on hover over noun-grid items
+let hideTimeout;
 document.querySelectorAll('.noun-grid li').forEach(el => {
     const term = el.textContent.trim();
-    let hideTimeout;
 
     el.addEventListener('mouseenter', (e) => {
         clearTimeout(hideTimeout);
@@ -1824,8 +1815,8 @@ function positionTip(e) {
     const th = tip.offsetHeight;
     const ww = window.innerWidth;
     const wh = window.innerHeight;
-    tip.style.left = (x + tw > ww ? e.clientX - tw - 16 : x) + 'px';
-    tip.style.top = (y + th > wh ? e.clientY - th - 12 : y) + 'px';
+    tip.style.left = Math.max(0, (x + tw > ww ? e.clientX - tw - 16 : x)) + 'px';
+    tip.style.top = Math.max(0, (y + th > wh ? e.clientY - th - 12 : y)) + 'px';
 }
 </script>
 
